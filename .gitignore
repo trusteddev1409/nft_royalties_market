@@ -1,0 +1,14 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+#OpenZeppeling contract
+contracts/OpenZeppelin
+
+#artifacts
+contracts/artifacts
+interfaces/artifacts
+
+#remix bat file
+connect to remix.bat
