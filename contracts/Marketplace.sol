@@ -2,7 +2,7 @@ pragma solidity ^0.8.0;
 
 // SPDX-License-Identifier: MIT
 
-import "OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/access/Ownable.sol";
+import "./OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/access/Ownable.sol";
 import "../interfaces/IERC2981.sol";
 import "./Token.sol";
 /**

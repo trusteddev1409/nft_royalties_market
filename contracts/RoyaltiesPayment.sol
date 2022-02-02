@@ -2,8 +2,8 @@ pragma solidity ^0.8.0;
 
 // SPDX-License-Identifier: MIT
 
-import "OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/access/Ownable.sol";
-import "OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/token/ERC20/IERC20.sol";
+import "./OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/access/Ownable.sol";
+import "./OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title Sample Royalties splitter contract
@@ -11,7 +11,6 @@ import "OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/token/ERC20/IERC20.s
         between them.
  */
 contract RoyaltiesPayment is Ownable {
-
     /// @notice Information about our user
     /// @dev userIndex > 0 for existing payees
     struct UserBalance {
@@ -28,11 +27,9 @@ contract RoyaltiesPayment is Ownable {
     constructor(address[] memory _payees) {
         payees = _payees;
         for (uint256 i = 0; i < payees.length; i++) {
-            balances[payees[i]] = UserBalance({userIndex : i+1,
-            balance : 0});
+            balances[payees[i]] = UserBalance({userIndex: i + 1, balance: 0});
         }
     }
-
 
     /// @notice Split every received payment equally between the payees
     receive() external payable {
@@ -41,14 +38,12 @@ contract RoyaltiesPayment is Ownable {
         for (uint256 i = 0; i < payees.length; i++) {
             balances[payees[i]].balance += sharePerPayee;
         }
-
     }
 
     /// @notice Whether an adress is in our list of payees or not
     /// @param user - the address to verify
     /// @return true if the user is a payee, false otherwise
-    function _isPayee(address user) internal
-    returns(bool) {
+    function _isPayee(address user) internal returns (bool) {
         return balances[user].userIndex > 0;
     }
 
@@ -56,10 +51,9 @@ contract RoyaltiesPayment is Ownable {
     /// @param amount - the amount to withdraw
     function withdraw(uint256 amount) external isPayee(msg.sender) {
         require(amount > 0);
-        require(amount <= balances[msg.sender].balance,
-            "Insufficient balance");
+        require(amount <= balances[msg.sender].balance, "Insufficient balance");
         balances[msg.sender].balance -= amount;
-        msg.sender.call{value: amount}('');
+        msg.sender.call{value: amount}("");
     }
 
     /// @notice Lets a user withdraw all the funds available to them
@@ -67,7 +61,7 @@ contract RoyaltiesPayment is Ownable {
         require(balances[msg.sender].balance > 0);
         uint256 balance = balances[msg.sender].balance;
         balances[msg.sender].balance = 0;
-        msg.sender.call{value: balance}('');
+        msg.sender.call{value: balance}("");
     }
 
     /// @notice Clear all balances by paying out all payees their share
@@ -77,7 +71,7 @@ contract RoyaltiesPayment is Ownable {
             uint256 availableBalance = balances[payee].balance;
             if (availableBalance > 0) {
                 balances[payee].balance = 0;
-                payee.call{value: availableBalance}('');
+                payee.call{value: availableBalance}("");
             }
         }
     }
@@ -111,7 +105,6 @@ contract RoyaltiesPayment is Ownable {
         delete (balances[payee]);
     }
 
-
     /// @notice Add a user to the list of payees
     /// @param payee - address of the user to add
     function addPayee(address payee) external onlyOwner {
@@ -138,8 +131,7 @@ contract RoyaltiesPayment is Ownable {
     }
 
     modifier isPayee(address user) {
-        require(_isPayee(user),
-            "Not payee");
+        require(_isPayee(user), "Not payee");
         _;
     }
 }

@@ -1,7 +1,7 @@
 pragma solidity ^0.8.0;
 // SPDX-License-Identifier: MIT
 
-import "OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/utils/introspection/ERC165.sol";
+import "../contracts/OpenZeppelin/openzeppelin-contracts@4.1.0/contracts/utils/introspection/ERC165.sol";
 
 ///
 /// @dev Interface for the NFT Royalty Standard
@@ -20,12 +20,8 @@ interface IERC2981 is IERC165 {
     /// @param _salePrice - the sale price of the NFT asset specified by _tokenId
     /// @return receiver - address of who should be sent the royalty payment
     /// @return royaltyAmount - the royalty payment amount for _salePrice
-    function royaltyInfo(
-        uint256 _tokenId,
-        uint256 _salePrice
-    ) external view returns (
-        address receiver,
-        uint256 royaltyAmount
-    );
-
+    function royaltyInfo(uint256 _tokenId, uint256 _salePrice)
+        external
+        view
+        returns (address receiver, uint256 royaltyAmount);
 }
